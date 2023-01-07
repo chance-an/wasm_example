@@ -2,7 +2,8 @@
 
 # This file takes reference from https://github.com/mdaines/viz.js/blob/master/Makefile
 
-EMCC=emcc
+EMCC=`which emcc`
+EMCXX=`which em++`
 GRAPHVIZ_DIR=lib/graphviz-7.0.5
 
 LIBOPTS=-O0 -g
@@ -39,7 +40,8 @@ clobber: | clean
 
 
 main: $(DEST)
-	$(EMCC) -std=c++14 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_IMAGE=2 -s WASM=1 -s USE_SDL=2 --memory-init-file 0 -sMAX_WEBGL_VERSION=2 -s MODULARIZE=0 -s LEGACY_VM_SUPPORT=1 -g -s NO_EXIT_RUNTIME=1 -fexceptions -o build/graph.html src/main.cpp
+	$(EMCC) src/main.cpp -o build/graph.html
+
 
 $(DEST):
 	mkdir $(DEST)
@@ -47,4 +49,8 @@ $(DEST):
 test:
 	echo $@
 
-FORCE:
+ init:
+	echo "install emsdk"
+	git clone https://github.com/emscripten-core/emsdk.git emsdk
+	cd emsdk && ./emsdk install latest && ./emsdk activate latest
+	cd emsdk && . ./emsdk_env.sh

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <functional>
 #include <emscripten.h>
-
+#include <EGL/egl.h>
 #include "SDL.h"
 #include <SDL_image.h>
 #include <GLES2/gl2.h>
@@ -117,7 +117,7 @@ void Init() {
    return;
 }
 
-void Draw ()
+void Draw (int width, int height)
 {
    GLfloat vVertices[] = {  0.0f,  0.5f, 0.0f, 
                            -0.5f, -0.5f, 0.0f,
@@ -130,7 +130,7 @@ void Draw ()
    glBufferData(GL_ARRAY_BUFFER, 9*4, vVertices, GL_STATIC_DRAW);
    
    // Set the viewport
-   glViewport ( 0, 0, 640, 480 );
+   glViewport ( 0, 0, width, height );
    
    // Clear the color buffer
    glClear ( GL_COLOR_BUFFER_BIT );
@@ -154,39 +154,51 @@ std::function<void()> loop;
 void main_loop() { loop(); }
 static SDL_Window *window = NULL;
 
-int main() {
-  try {
+int main(int argc, char *argv[]) {
+    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
-    SDL_Renderer *renderer = NULL;
-    SDL_CreateWindowAndRenderer(640, 480, SDL_WINDOW_OPENGL, &window, &renderer);
+    EGLint major, minor;
+    eglInitialize(display, &major, &minor);
 
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_EVENTS) != 0) {
-        SDL_Log("Failed to initialize SDL: %s", SDL_GetError());
-        return 1;
-    }
+    eglBindAPI(EGL_OPENGL_ES_API);
+
+    EGLint numConfigs;
+    eglGetConfigs(display, NULL, 0, &numConfigs);
+
+    EGLint attribs[] = {
+        EGL_RED_SIZE, 5,
+        EGL_GREEN_SIZE, 6,
+        EGL_BLUE_SIZE, 5,
+        EGL_NONE
+    };
+    EGLConfig config;
+    eglChooseConfig(display, attribs, &config, 1, &numConfigs);
+
+    EGLNativeWindowType window;
+    EGLint surfaceAttributes[] = { EGL_NONE };
+    EGLSurface surface = eglCreateWindowSurface(display, config, window, surfaceAttributes);
+
+    EGLint width, height;
+    eglQuerySurface(display, surface, EGL_WIDTH, &width);
+    eglQuerySurface(display, surface, EGL_HEIGHT, &height);
+
+    EGLint contextAttributes[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
+    EGLContext context = eglCreateContext(display, config, NULL, contextAttributes);
+
+    eglMakeCurrent(display, surface, surface, context);
 
     Init();
-
     loop = [&]
     {
-       
         // Clear the screen
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
         // Draw a triangle from the 3 vertices
-        Draw ();
-
-        SDL_GL_SwapWindow(window);
+        Draw(width, height);
+        eglSwapBuffers(display, surface);
     };
-
     emscripten_set_main_loop(main_loop, 0, true);
-
     
-    printf("hello, world!\n");
-    return EXIT_SUCCESS;
-  } catch( const std::exception &e) {
-    
-    printf("Caught stuff %s\n", e.what());
-  }
+    return 0;
 }
+
