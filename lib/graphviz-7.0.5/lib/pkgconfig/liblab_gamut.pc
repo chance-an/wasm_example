@@ -1,0 +1,10 @@
+prefix=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full
+exec_prefix=${prefix}
+libdir=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full/lib
+includedir=${prefix}/include/graphviz
+
+Name: liblab_gamut
+Description: data library for default color labeling
+Version: 7.0.5
+Libs: -L${libdir} -llab_gamut
+Cflags: -I${includedir}

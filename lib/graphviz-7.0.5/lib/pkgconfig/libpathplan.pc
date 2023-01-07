@@ -1,0 +1,10 @@
+prefix=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full
+exec_prefix=${prefix}
+libdir=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full/lib
+includedir=${prefix}/include/graphviz
+
+Name: libpathplan
+Description: Library for planning polyline and bezier paths around polygon obstacles
+Version: 7.0.5
+Libs: -L${libdir} -lpathplan
+Cflags: -I${includedir}

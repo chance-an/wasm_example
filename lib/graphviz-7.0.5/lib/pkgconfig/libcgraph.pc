@@ -1,0 +1,10 @@
+prefix=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full
+exec_prefix=${prefix}
+libdir=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full/lib
+includedir=${prefix}/include/graphviz
+
+Name: libcgraph
+Description: Graph library (file i/o, dot language parsing, graph, subgraph, node, edge, attribute, data structure manipulation)
+Version: 7.0.5
+Libs: -L${libdir} -lcgraph -lcdt
+Cflags: -I${includedir}

@@ -1,0 +1,7 @@
+conanbuildinfo.args
+conanbuildinfo.txt
+
+lib/*
+!lib/graphviz-7.0.5/
+
+build/

@@ -1,0 +1,12 @@
+prefix=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full
+exec_prefix=${prefix}
+libdir=/Users/anch/develop/webassembly/graph/lib/graphviz-7.0.5-full/lib
+includedir=${prefix}/include/graphviz
+plugins=6
+
+Name: libgvc
+Description: The GraphVizContext library 
+Version: 7.0.5
+Libs: -L${libdir} -lgvc -lcgraph -lcdt
+Cflags: -I${includedir}
+
