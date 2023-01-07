@@ -10,6 +10,8 @@ LIB_DEST=$(abspath lib/graphviz-7.0.5)
 
 EMCC_OPT=-s SAFE_HEAP=1
 
+DEST=build
+
 default: main
 
 clean:
@@ -35,8 +37,12 @@ clobber: | clean
 # graphviz_wasm: 
 # 	$(EMCC) -std=c++14 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s WASM=1 -s USE_SDL=2 --memory-init-file 0 -sMAX_WEBGL_VERSION=2 -s USE_ZLIB=1 -s MODULARIZE=0 -s LEGACY_VM_SUPPORT=1 -s NO_DYNAMIC_EXECUTION=1 -g -sFETCH -s NO_EXIT_RUNTIME=1 -fexceptions -o build/graph.html -Ilib/json -I$(LIB_DEST)/include -I$(LIB_DEST)/include/graphviz -L$(LIB_DEST)/lib -L$(LIB_DEST)/lib/graphviz -lgvplugin_core -lgvplugin_dot_layout -lgvplugin_neato_layout -lcdt -lcgraph -lgvc -lgvpr -lpathplan -lxdot src/graphviz.cpp src/opengl.cpp
 
-main: 
-	$(EMCC) -std=c++14 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_IMAGE=2 -s WASM=1 -s USE_SDL=2 --memory-init-file 0 -sMAX_WEBGL_VERSION=2 -s MODULARIZE=0 -s LEGACY_VM_SUPPORT=1 -g -s NO_EXIT_RUNTIME=1 -fexceptions -o build/graph.html -Ilib/json src/main.cpp
+
+main: $(DEST)
+	$(EMCC) -std=c++14 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_IMAGE=2 -s WASM=1 -s USE_SDL=2 --memory-init-file 0 -sMAX_WEBGL_VERSION=2 -s MODULARIZE=0 -s LEGACY_VM_SUPPORT=1 -g -s NO_EXIT_RUNTIME=1 -fexceptions -o build/graph.html src/main.cpp
+
+$(DEST):
+	mkdir $(DEST)
 
 test:
 	echo $@
