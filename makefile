@@ -10,7 +10,7 @@ LIB_DEST=$(abspath lib/graphviz-7.0.5)
 
 EMCC_OPT=-s SAFE_HEAP=1
 
-default: build
+default: main
 
 clean:
 
