@@ -38,11 +38,6 @@ clobber: | clean
 # graphviz_wasm: 
 # 	$(EMCC) -std=c++14 -s TOTAL_MEMORY=33554432 -s ALLOW_MEMORY_GROWTH=1 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s WASM=1 -s USE_SDL=2 --memory-init-file 0 -sMAX_WEBGL_VERSION=2 -s USE_ZLIB=1 -s MODULARIZE=0 -s LEGACY_VM_SUPPORT=1 -s NO_DYNAMIC_EXECUTION=1 -g -sFETCH -s NO_EXIT_RUNTIME=1 -fexceptions -o build/graph.html -Ilib/json -I$(LIB_DEST)/include -I$(LIB_DEST)/include/graphviz -L$(LIB_DEST)/lib -L$(LIB_DEST)/lib/graphviz -lgvplugin_core -lgvplugin_dot_layout -lgvplugin_neato_layout -lcdt -lcgraph -lgvc -lgvpr -lpathplan -lxdot src/graphviz.cpp src/opengl.cpp
 
-
-main: $(DEST)
-	$(EMCC) src/main.cpp -o build/graph.html
-
-
 $(DEST):
 	mkdir $(DEST)
 
@@ -50,7 +45,17 @@ test:
 	echo $@
 
  init:
-	echo "install emsdk"
-	git clone https://github.com/emscripten-core/emsdk.git emsdk
-	cd emsdk && ./emsdk install latest && ./emsdk activate latest
-	cd emsdk && . ./emsdk_env.sh
+	scripts/init.sh
+	brew install cmake ninja http-server
+	code --install-extension llvm-vs-code-extensions.vscode-clangd
+	code --install-extension twxs.cmake
+
+	# this will change the submodule to homebrew version
+	# brew install emscripten
+
+gen:
+	rm -rf build/Debug/CMakeCache.txt;
+	cmake -GNinja -S. -Bbuild/Debug -DEXAMPLE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_TOOLCHAIN_FILE=./emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+
+main:
+	cmake --build build/Debug --target wasm-example
