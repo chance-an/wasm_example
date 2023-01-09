@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
     EGLint numConfigs;
     eglGetConfigs(display, NULL, 0, &numConfigs);
 
-    EGLint attribs[] = {EGL_RED_SIZE, 5, EGL_GREEN_SIZE, 6, EGL_BLUE_SIZE, 5, EGL_NONE};
+    EGLint attribs[] = {EGL_RED_SIZE, 8, EGL_GREEN_SIZE, 8, EGL_BLUE_SIZE, 8, EGL_NONE};
     EGLConfig config;
     eglChooseConfig(display, attribs, &config, 1, &numConfigs);
 
