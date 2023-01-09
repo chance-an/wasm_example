@@ -1,0 +1,23 @@
+#https://clangd.llvm.org/config
+CompileFlags:                             
+    Add: 
+      [
+        -std=c++20,
+        -Wno-documentation,
+        -Wno-missing-prototypes,
+      ]
+Diagnostics:
+  ClangTidy:
+    Add:
+    [
+        performance-*,
+        bugprone-*,
+        modernize-*,
+        clang-analyzer-*,
+        readability-identifier*,
+    ]
+    Remove: [
+      modernize-use-trailing-return-type
+    ]
+    CheckOptions:
+      readability-identifier-naming.VariableCase: camelCase

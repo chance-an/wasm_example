@@ -1,0 +1,25 @@
+{
+  "clangd.arguments": [
+    "--background-index",
+    "--compile-commands-dir=build/Debug",
+    "-j=8",
+    "--all-scopes-completion",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+    "--pch-storage=memory",
+    "--cross-file-rename",
+    "--enable-config",
+    "--fallback-style=WebKit",
+    "--pretty",
+    "--clang-tidy"
+  ],
+  "search.exclude": {
+    "**/build": true
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "editor.formatOnSave": true,
+  "editor.fontFamily": "Consolas, 'Courier New', monospace",
+  "editor.fontSize": 14
+}

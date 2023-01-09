@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Wasm Example",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8080",
+      //需要先在example_web 执行http-server . -p 8080
+      "preLaunchTask": "build"
+    }
+  ]
+}

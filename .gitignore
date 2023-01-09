@@ -5,3 +5,4 @@ lib/*
 !lib/graphviz-7.0.5/
 
 build/
+example_web/
